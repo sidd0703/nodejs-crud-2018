@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <title>All Posts</title>
+        <style>
+            table tr td{
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="result"></div>
+        <table>
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Description</td>
+                    <td>Category</td>
+                    <td>  <a href="edit.html"> Edit </a></td>
+                    <td>  <a href="edit.html"> Delete </a></td>
+                </tr>
+            </thead>
+            <tbody class="records">
+
+            </tbody>
+        </table>
+ 
+    </body>
+</html>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+<script>
+$(document).ready(function(){
+    $.ajax({
+        url: 'http://localhost:3000/posts/index',
+        method: 'get',
+        success: function(success) {
+            success.message.forEach(function(index) {
+                $(".records").append(
+                    `<tr>
+                        <td>${index.title}</td>
+                        <td>${index.description}</td>
+                        <td>${index.category}</td>
+                        <td><a href='edit.html?id=${index.id}'> Edit </a> </td>
+                        <td id='delete' val=${index.id}> Delete </td>
+                    </tr>
+                    `
+                )
+            })
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    })
+});
+
+
+// $("#delete").click(function() {
+$(document).on('click', '#delete', function(){
+    var id = $(this).attr('val');
+    // alert(id);
+    var result = confirm("Are you sure you want to delete?");
+    if(result) {
+        $.ajax({
+            url: "http://localhost:3000/posts/delete",
+            method: "post",
+            data: {
+                id: id
+            },
+            success: function() {
+                $("#result").empty().html('Post deleted successfully');                
+            },
+            error: function() {
+                $("#result").empty().html('An error occured..');                
+            }
+        })        
+    }
+})
+</script>

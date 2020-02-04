@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Create Post</title>
+        <style>
+            #result{
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="result"></div>
+
+        <form id="postsForm" name="postsForm">
+            <label>Title:</label>
+            <input type="text" id="title" name="title" />
+
+            <br/><br/>
+
+            <label>Description:</label>
+            <textarea id="description" name="description"></textarea>
+            
+            <br/><br/>
+
+            <label>Category:</label>
+            <input type="text" id="category" name="category" />
+
+            <br/><br/>
+
+            <input type="submit" id="submit" name="submit" />
+        </form>
+    </body>
+</html>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+<script>
+$("#delete").click(function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: 'http://localhost:3000/posts/create',
+        method: 'post',
+        data: $("#postsForm").serialize(),
+        success: function(success) {
+            $("#result").empty().html(success.message)
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    })
+});
+</script>

@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Edit Post</title>
+        <style>
+            #result{
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="result"></div>
+
+        <form id="postsForm" name="postsForm">
+            <label>Title:</label>
+            <input type="text" id="title" name="title" />
+
+            <br/><br/>
+
+            <label>Description:</label>
+            <textarea id="description" name="description"></textarea>
+            
+            <br/><br/>
+
+            <label>Category:</label>
+            <input type="text" id="category" name="category" />
+
+            <br/><br/>
+
+            <input type="hidden" id="id" name="id" />
+
+            <input type="submit" id="submit" name="submit" />
+        </form>
+    </body>
+</html>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+<script>
+$(document).ready(function(){
+    $.ajax({
+        url: 'http://localhost:3000/posts/view',
+        method: 'post',
+        data: {
+            id: 1
+        },
+        success: function(success) {
+            if(success.message){
+                $("#title").val(success.message.title);
+                $("#description").val(success.message.description);
+                $("#category").val(success.message.category);
+                $("#id").val(success.message.id);
+            }
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    })
+});
+
+
+$("#submit").click(function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: 'http://localhost:3000/posts/update',
+        method: 'post',
+        data: $("#postsForm").serialize(),
+        success: function(success) {
+            $("#result").empty().html(success.message)
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    })
+});
+
+</script>
